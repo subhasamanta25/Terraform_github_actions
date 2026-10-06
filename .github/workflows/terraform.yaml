@@ -22,8 +22,12 @@ env:
 
 jobs:
 
+  # =========================
+  # CI - Pull Request
+  # =========================
+
   terraform-plan:
-    name: Terraform Plan
+    name: Terraform CI - Plan
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
 
@@ -52,7 +56,6 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        id: plan
         run: |
           terraform plan -no-color -out=tfplan
           terraform show -no-color tfplan > plan.txt
@@ -85,8 +88,12 @@ jobs:
             });
 
 
+  # =========================
+  # CD - Production
+  # =========================
+
   terraform-apply:
-    name: Terraform Apply
+    name: Terraform CD - Apply
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
